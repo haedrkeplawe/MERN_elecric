@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:4000",
+  "proxy": "https://mern-porslan-api.onrender.com",
   "name": "lesson_05-frontend",
   "version": "0.1.0",
   "dependencies": {
