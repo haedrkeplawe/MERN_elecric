@@ -5,11 +5,10 @@ const getPage = async (req, res) => {
     res.status(200).json(qusets)
 }
 
-const getOneQusest = (req, res) => {
-    Quset.findById(req.params.id)
-        .then((result) => {
-            res.json({ result });
-        })
+const getOneQusest = async (req, res) => {
+    const id = req.params.id
+    const qusets = await Quset.findById(id)
+    res.status(200).json(qusets)
 }
 const createQusest = async (req, res) => {
     try {
@@ -21,15 +20,15 @@ const createQusest = async (req, res) => {
 }
 const updateQusest = async (req, res) => {
     const { id } = req.params
-    const workout = await Quset.findOneAndUpdate({ _id: id }, {
+    const quest = await Quset.findOneAndUpdate({ _id: id }, {
         ...req.body
     })
-    res.status(200).json(workout)
+    res.status(200).json(quest)
 }
 const deleteQusest = async (req, res) => {
     const { id } = req.params
-    const workout = await Quset.findOneAndDelete({ _id: id })
-    res.status(200).json(workout)
+    const quest = await Quset.findOneAndDelete({ _id: id })
+    res.status(200).json(quest)
 }
 
 module.exports = {
