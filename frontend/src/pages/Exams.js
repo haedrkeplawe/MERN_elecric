@@ -4,6 +4,7 @@ import Nav from "../components/Nav"
 import { useQuestContext } from "../hooks/useQuestContext"
 import Boxs from "../components/Boxs"
 import { useAuthContext } from "../hooks/useAuthContext"
+import { URL } from "../utils/URL"
 
 const Exams = () => {
     const type = useLocation().search.slice(6,)
@@ -12,7 +13,7 @@ const Exams = () => {
 
     useEffect(() => {
         const fetchQuest = async () => {
-            const response = await fetch(`/exams?method=${type}`, {
+            const response = await fetch(URL + `/exams?method=${type}`, {
                 headers: {
                     "Authorization": `Bearer ${user.token}`
                 }
@@ -40,6 +41,9 @@ const Exams = () => {
             <Link className="add" to={"/create?type=" + type}>ساهم باضافه سوال</Link>
             <section>
                 <div className="contaienr">
+                    {!quests && (
+                        <h2>loading...</h2>
+                    )}
                     {quests && quests.map((test, index) => {
                         return (
                             <Boxs key={test._id}
@@ -48,7 +52,6 @@ const Exams = () => {
                                 type={type}
                             />)
                     }
-
                     )}
                 </div>
             </section >

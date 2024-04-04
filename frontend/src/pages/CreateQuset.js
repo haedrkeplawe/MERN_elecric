@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useLocation, Navigate } from 'react-router-dom'
 import { useQuestContext } from "../hooks/useQuestContext"
+import { useAuthContext } from "../hooks/useAuthContext"
+import { URL } from "../utils/URL"
 
 const CreateQuset = () => {
     const type = useLocation().search.slice(6,)
@@ -13,15 +15,17 @@ const CreateQuset = () => {
     const [ans5, setAns5] = useState("")
     const [number, setNumber] = useState(0)
     const { quests, dispatch } = useQuestContext()
+    const { user } = useAuthContext()
 
     const CreateTestHandel = async (e) => {
         e.preventDefault()
         const newquest = { name, type, number, ans5, ans4, ans3, ans2, ans1, quest }
-        const response = await fetch('/exams/add', {
+        const response = await fetch(URL + '/exams/add', {
             method: 'POST',
             body: JSON.stringify(newquest),
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization": `Bearer ${user.token}`
             }
         })
         const json = await response.json()

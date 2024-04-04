@@ -1,5 +1,4 @@
 {
-  "proxy": "https://electric-hyc8.onrender.com",
   "name": "lesson_05-frontend",
   "version": "0.1.0",
   "dependencies": {

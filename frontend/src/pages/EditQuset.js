@@ -2,6 +2,8 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useLocation, Navigate } from "react-router-dom"
 import { useQuestContext } from "../hooks/useQuestContext"
+import { useAuthContext } from "../hooks/useAuthContext"
+import { URL } from "../utils/URL"
 
 const EditQuset = ({ }) => {
     const indexOfAnd = useLocation().search.indexOf("&&")
@@ -19,23 +21,32 @@ const EditQuset = ({ }) => {
     const [ans5, setAns5] = useState("")
     const [number, setNumber] = useState(0)
     const { quests, dispatch } = useQuestContext()
+    const { user } = useAuthContext()
 
     useEffect(() => {
-        axios.get(`/exams/add-old/` + id).then((response) => {
-            setName(response.data.result.name)
-            setQuest(response.data.result.quest)
-            setAns1(response.data.result.ans1)
-            setAns2(response.data.result.ans2)
-            setAns3(response.data.result.ans3)
-            setAns4(response.data.result.ans4)
-            setAns5(response.data.result.ans5)
-            setNumber(response.data.result.number)
-        })
+        const fetchQuest = async () => {
+            const response = await fetch(URL + `/exams/add-old/` + id,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${user.token}`
+                    }
+                })
+            const json = await response.json()
+            setName(json.name)
+            setQuest(json.quest)
+            setAns1(json.ans1)
+            setAns2(json.ans2)
+            setAns3(json.ans3)
+            setAns4(json.ans4)
+            setAns5(json.ans5)
+            setNumber(json.number)
+        }
+        fetchQuest()
     }, [])
 
     const UpdateTestHandel = async (e) => {
         e.preventDefault()
-        const response = await fetch(`/exams/add-old/` + id,
+        const response = await fetch(URL + `/exams/add-old/` + id,
             {
                 method: "PATCH",
                 body: JSON.stringify({
@@ -51,11 +62,12 @@ const EditQuset = ({ }) => {
                 }),
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`
                 }
             })
         const json = await response.json()
         if (response.ok) {
-            dispatch({ type: "UPDATE_TASK", payload: json })
+            // dispatch({ type: "UPDATE_TASK", payload: json })
             setRedirect(true)
         }
     }
